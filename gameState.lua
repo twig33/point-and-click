@@ -13,7 +13,7 @@ function gameStateInit()
 
   -- Stores the current room
   gameState.room = "MainMenu" 
-
+  gameState.debug = "true"
   -- Player information
   gameState.player.x = 50
   gameState.player.y = 50

@@ -1,7 +1,6 @@
 local text = {}
 office = {}
-rect = HC.rectangle(200, 400, 400, 20)
-couch = HC.rectangle(150, 500, 300, 50)
+poly = HC.polygon(60, 399,74, 468, 304, 563, 365,511,347,467)
 function office.load()
 	
 end
@@ -12,7 +11,6 @@ end
 
 function office.draw()
 	if gameState.room == 'Intro' then
-	rect:draw('fill')
-	couch:draw('fill')
+	poly:draw('fill')
 end
 end
