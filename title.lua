@@ -1,6 +1,9 @@
+require "system"
+
 buttons = {}
 buttons[1] = {376, 380, 360, 72, "New Gameaaaaaaaaaaaaaaaaaaaaaaaa"}
 buttons[2] = {376, 476, 360, 72, "Continue"}
+buttons[3] = {150, WINDOW_HEIGHT - 50, 360, 72, ""}; bottomTextIndex = 3; --bottom text
 
 buttons.message = ""
 title={}
@@ -26,7 +29,7 @@ function title.draw()
       local bW = b[3] * scale;
       local bH = b[4] * scale;
       local bText = b[5];
-
+	  
       if buttons:mouseCheck(b) then -- if the mouse is over the button...
 
         -- Button border
@@ -36,14 +39,14 @@ function title.draw()
         love.graphics.rectangle("line", bX, bY, bW, bH)
 
         -- Update the button message at the bottom of the screen
-        if bText == "New Game" then
-          buttons.message = "Start a new game - erases old save file"
+        if bText == "New Gameaaaaaaaaaaaaaaaaaaaaaaaa" then
+          buttons[bottomTextIndex][5] = "Start a new game - erases old save file"
         elseif bText == "Continue" then
-          buttons.message = "Continue from where you left off"
+          buttons[bottomTextIndex][5] = "Continue from where you left off"
         elseif bText == ".sound" then
-          buttons.message = "Turn music and sound effects on or off"
+          buttons[bottomTextIndex][5] = "Turn music and sound effects on or off"
         elseif bText == ".github" then
-          buttons.message = "View the code on GitHub"
+          buttons[bottomTextIndex][5] = "View the code on GitHub"
         end
 
       end
