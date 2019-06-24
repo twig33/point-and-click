@@ -12,12 +12,15 @@ maintitle = love.graphics.newImage('img/titulo.png')
 scale = 1
 end
 
+function title.update(dt)
+	return true
+end
+
 function title.draw()
-	 if gameState.room == "MainMenu" then
 	love.graphics.setColor(1, 1, 1)
-	    love.graphics.draw(maintitle)
+		love.graphics.draw(maintitle)
 	love.graphics.setColor(0, 0, 0.1)
-	    love.graphics.printf("CAVERN", 0, 140 , 400, "center")
+		love.graphics.printf("CAVERN", 0, 140 , 400, "center")
     buttons.message = ""
 
     for _,b in ipairs(buttons) do
@@ -63,9 +66,6 @@ function title.draw()
       else
         love.graphics.printf(bText, bX, bY + 8 * scale, bW, "center")
       end
-
-    end
-
 end
 
 end
@@ -132,7 +132,7 @@ love.graphics.print("test", 10, 100)
       elseif i == 4 then -- GitHub button
 
         -- Open the GitHub page for this game!
-        love.system.openURL("https://github.com/kyleschaub/cavern")
+        love.system.openURL("https://github.com/lightykins/point-and-click")
 
       end
 

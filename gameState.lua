@@ -2,6 +2,14 @@ gameState = {}
 gameState.player = {}
 gameState.pickups = {}
 
+GAMESTATE_NULL, GAMESTATE_MAINMENU, GAMESTATE_GAME = 0, 1, 2 --"""""enum"""""
+
+GameState = 
+{
+	[GAMESTATE_MAINMENU] = title,
+	[GAMESTATE_GAME] = game,
+}
+
 function gameStateInit()
 
   -- Number of times the game has been saved.
@@ -9,10 +17,7 @@ function gameStateInit()
   gameState.saveCount = 0
 
   -- State stores if update functions should occur
-  gameState.state = 1
-
-  -- Stores the current room
-  gameState.room = "MainMenu" 
+  gameState.state = GAMESTATE_NULL
 
   -- Player information
   gameState.player.x = 50
@@ -31,4 +36,14 @@ function gameStateInit()
   -- Changes to false after the tutorial text disappears
   gameState.tutorial = true
 
+end
+
+function changeGameState(param)
+	if (gameState.state != GAMESTATE_NULL)
+		GameState[gameState.state].finish()
+	end
+	gameState.state = param
+	if (gameState.state != GAMESTATE_NULL)
+		GameState[gameState.state].init()
+	end
 end
