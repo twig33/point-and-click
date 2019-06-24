@@ -1,6 +1,0 @@
-debug = {}
-
-function mouseLocation()
-	xMouse, yMouse = love.mouse.getPosition( )
-	love.graphics.print("x: %d y: %d", xMouse,yMouse)
-end
