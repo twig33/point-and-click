@@ -3,6 +3,7 @@ require 'animating'
 require 'maps.office'
 require 'title'
 require 'gameState'
+require 'dbg'
  local updateGameplay = require("update")
 local player = require 'player'
 gameState.room = "MainMenu"
@@ -11,9 +12,9 @@ function love.load()
 	title.load()
 	gameStateInit()
 	office.load()
+	debug.load()
 	bg = love.graphics.newImage('img/oz_screen6.jpg')
 end
-
 function love.draw()
 
 love.graphics.setColor(1, 1, 1)
@@ -22,6 +23,7 @@ love.graphics.setColor(1, 1, 1)
 	adachi.draw()
 	title.draw()
 	office.draw()
+	debug.mouseLocation()
 end
  
 function love.update( dt )
