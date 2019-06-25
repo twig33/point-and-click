@@ -14,8 +14,13 @@ function gameStateInit()
   gameState.saveCount = 0
 
   -- State stores if update functions should occur
+
+  
+  -- Stores the current room
   gameState.state = GAMESTATE_NULL
   gameState.room = ROOM_NULL
+  gameState.state = 1
+
   -- Player information
   gameState.player.x = 50
   gameState.player.y = 50
