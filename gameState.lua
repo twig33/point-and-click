@@ -1,14 +1,11 @@
+
 gameState = {}
 gameState.player = {}
 gameState.pickups = {}
 
-GAMESTATE_NULL, GAMESTATE_MAINMENU, GAMESTATE_GAME = 0, 1, 2 --"""""enum"""""
-
-GameState = 
-{
-	[GAMESTATE_MAINMENU] = title,
-	[GAMESTATE_GAME] = game,
-}
+GAMESTATE_NULL, GAMESTATE_MAINMENU, GAMESTATE_GAME, GAMESTATE_CREDITS = 0, 1, 2, 3 --"""""enum"""""
+ROOM_NULL, ROOM_INTRO = 0, 1
+GAME_NEWGAME, GAME_CONTINUE = 1, 2
 
 function gameStateInit()
 
@@ -18,7 +15,7 @@ function gameStateInit()
 
   -- State stores if update functions should occur
   gameState.state = GAMESTATE_NULL
-
+  gameState.room = ROOM_NULL
   -- Player information
   gameState.player.x = 50
   gameState.player.y = 50
@@ -38,12 +35,14 @@ function gameStateInit()
 
 end
 
-function changeGameState(param)
-	if (gameState.state != GAMESTATE_NULL)
-		GameState[gameState.state].finish()
+function changeGameState(staet, unload, param)
+	param = param or nil
+	unload = unload or true
+	if (gameState.state ~= GAMESTATE_NULL and unload == true) then
+		GameState[gameState.state].unload()
 	end
-	gameState.state = param
-	if (gameState.state != GAMESTATE_NULL)
-		GameState[gameState.state].init()
+	gameState.state = staet
+	if (gameState.state ~= GAMESTATE_NULL and GameState[gameState.state].loaded == false) then
+		GameState[gameState.state].load(param)
 	end
 end

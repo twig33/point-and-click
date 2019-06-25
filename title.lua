@@ -1,15 +1,24 @@
 require "system"
+require "gameState"
 
+title={}
+title.loaded = false
 buttons = {}
+maintitle = nil
+function title.load()
+title.loaded = true
+maintitle = love.graphics.newImage('img/titulo.png')
 buttons[1] = {376, 380, 360, 72, "New Gameaaaaaaaaaaaaaaaaaaaaaaaa"}
 buttons[2] = {376, 476, 360, 72, "Continue"}
 buttons[3] = {150, WINDOW_HEIGHT - 50, 360, 72, ""}; bottomTextIndex = 3; --bottom text
-
 buttons.message = ""
-title={}
-function title.load()
-maintitle = love.graphics.newImage('img/titulo.png')
 scale = 1
+end
+
+function title.unload()
+title.loaded = false
+maintitle = nil
+buttons = nil
 end
 
 function title.update(dt)
@@ -107,7 +116,8 @@ love.graphics.print("test", 10, 100)
   --      intro.timer = 1
         buttons.message = ""
   --      soundManager:musicFade()
-	gameState.room = "Intro"
+		changeGameState(GAMESTATE_GAME, true, GAME_NEWGAME)
+		return
  --       changeToMap("rmIntro")
 
       elseif i == 2 then -- Continue button

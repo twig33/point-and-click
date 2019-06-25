@@ -3,25 +3,34 @@ require 'animating'
 require 'maps.office'
 --require 'io'
 require 'title'
+require 'game'
+require 'logging'
 require 'gameState'
 local updateGameplay = require("update")
 local player = require 'player'
+GameState = 
+{
+	[GAMESTATE_MAINMENU] = title,
+	[GAMESTATE_GAME] = game,
+}
 --local title = require 'title'
 --local game = require 'game'
 --local gameState = require 'gameState'
-local logfile = assert(io.open("log.txt", "a"))
+
 
 function love.load()
 	--adachi.load()
 	--title.load()
+	log("\n\nInit\n")
 	gameStateInit()
+	changeGameState(GAMESTATE_MAINMENU)
 	--office.load()
 	--bg = love.graphics.newImage('img/oz_screen6.jpg')
 end
 
 function love.draw()
 	love.graphics.setColor(1, 1, 1)
-	logfile:write("aaaa")
+	--logfile:write("aaaa")
 	GameState[gameState.state].draw()
 end
  

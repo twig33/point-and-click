@@ -1,7 +1,6 @@
 local text = {}
 office = {}
-rect = HC.rectangle(200, 400, 400, 20)
-couch = HC.rectangle(150, 500, 300, 50)
+
 function office.load()
 	
 end
