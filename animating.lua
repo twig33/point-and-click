@@ -10,7 +10,7 @@ animation = anim8.newAnimation(g('1-8',1), 0.1)
 adachi.y = 350
 adachi.x = 250
 adachi.vel = 100
- adachi.hitbox = HC.circle(40,40,20)
+adachi.hitbox = HC.circle(40,40,20)
 adachi.animations = {
  up =  anim8.newAnimation(g('5-8',3), 0.1),	
  down = anim8.newAnimation(g('1-4',3),0.1),
@@ -19,6 +19,12 @@ adachi.animations = {
 }
 local keyDown 
 adachi.animation = animation
+end
+
+function adachi.unload()
+image = nil
+animation = nil
+adachi = nil
 end
 
 function adachi.update(dt)
