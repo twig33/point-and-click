@@ -6,7 +6,8 @@ require 'title'
 require 'game'
 require 'logging'
 require 'gameState'
-local updateGameplay = require("update")
+require 'dbg'
+ local updateGameplay = require("update")
 local player = require 'player'
 GameState = 
 {
@@ -26,12 +27,20 @@ function love.load()
 	changeGameState(GAMESTATE_MAINMENU)
 	--office.load()
 	--bg = love.graphics.newImage('img/oz_screen6.jpg')
+	debug.load()
 end
-
 function love.draw()
 	love.graphics.setColor(1, 1, 1)
 	--logfile:write("aaaa")
 	GameState[gameState.state].draw()
+
+--love.graphics.setColor(1, 1, 1)
+--	love.graphics.draw(bg)
+--        player.draw()
+--	adachi.draw()
+--	title.draw()
+--	office.draw()
+	debug.mouseLocation()
 end
  
 function love.update( dt )
