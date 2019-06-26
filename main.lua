@@ -24,6 +24,7 @@ function love.load()
 	--title.load()
 	log("\n\nInit\n")
 	gameStateInit()
+	gameState.state = GAMESTATE_NULL
 	changeGameState(GAMESTATE_MAINMENU)
 	--office.load()
 	--bg = love.graphics.newImage('img/oz_screen6.jpg')

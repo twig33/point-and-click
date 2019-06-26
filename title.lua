@@ -8,9 +8,9 @@ maintitle = nil
 function title.load()
 title.loaded = true
 maintitle = love.graphics.newImage('img/titulo.png')
-buttons[1] = {376, 380, 360, 72, "New Gameaaaaaaaaaaaaaaaaaaaaaaaa"}
-buttons[2] = {376, 476, 360, 72, "Continue"}
-buttons[3] = {150, WINDOW_HEIGHT - 50, 360, 72, ""}; bottomTextIndex = 3; --bottom text
+buttons[1] = {400, 380, 360, 72, "New Gameaaaaaaaaaaaaaaaaaaaaaaaa"}
+buttons[2] = {400, 476, 360, 72, "Continue"}
+--buttons[3] = {150, WINDOW_HEIGHT - 50, 360, 72, ""}; bottomTextIndex = 3; --bottom text
 buttons.message = ""
 scale = 1
 end
@@ -30,6 +30,9 @@ function title.draw()
 		love.graphics.draw(maintitle)
 	love.graphics.setColor(0, 0, 0.1)
 		love.graphics.printf("CAVERN", 0, 140 , 400, "center")
+		love.graphics.setColor(1,0,0,200)
+		love.graphics.printf(buttons.message, 160, 430, 400, "left")
+		love.graphics.setColor(1,1,1)
     buttons.message = ""
 
     for _,b in ipairs(buttons) do
@@ -52,13 +55,13 @@ function title.draw()
 
         -- Update the button message at the bottom of the screen
         if bText == "New Gameaaaaaaaaaaaaaaaaaaaaaaaa" then
-          buttons[bottomTextIndex][5] = "Start a new game - erases old save file"
+          buttons.message = "Start a new game - erases old save file"
         elseif bText == "Continue" then
-          buttons[bottomTextIndex][5] = "Continue from where you left off"
+          buttons.message = "Continue from where you left off"
         elseif bText == ".sound" then
-          buttons[bottomTextIndex][5] = "Turn music and sound effects on or off"
+          buttons.message = "Turn music and sound effects on or off"
         elseif bText == ".github" then
-          buttons[bottomTextIndex][5] = "View the code on GitHub"
+          buttons.message = "View the code on GitHub"
         end
 
       end
