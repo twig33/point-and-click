@@ -1,13 +1,13 @@
 HC = require "lib.hardoncollider"
 require 'animating'
 require 'maps.office'
---require 'io'
+require 'ui'
 require 'title'
 require 'game'
 require 'logging'
 require 'gameState'
 require 'dbg'
- local updateGameplay = require("update")
+local updateGameplay = require("update")
 local player = require 'player'
 GameState = 
 {
@@ -23,7 +23,9 @@ function love.load()
 	--adachi.load()
 	--title.load()
 	log("\n\nInit\n")
+	ui.load()
 	gameStateInit()
+	gameState.state = GAMESTATE_NULL
 	changeGameState(GAMESTATE_MAINMENU)
 	--office.load()
 	--bg = love.graphics.newImage('img/oz_screen6.jpg')
@@ -45,10 +47,4 @@ end
  
 function love.update( dt )
 	GameState[gameState.state].update(dt)
-end
-
-function love.mousepressed( x, y, button, istouch )
- if button == 1 and gameState.state == GAMESTATE_MAINMENU then
-buttons:click()
-end
 end

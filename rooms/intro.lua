@@ -10,9 +10,9 @@ function intro.unload()
 	intro = nil
 end
 function intro.draw()
+	love.graphics.draw(intro.bg)
 	intro.rect:draw('fill')
 	intro.couch:draw('fill')
---	intro.bg:draw() --я хз как рисовать поэтому черный экран
 end
 function intro.update(dt)
 	return
