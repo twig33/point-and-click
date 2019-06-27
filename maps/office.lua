@@ -11,6 +11,6 @@ end
 
 function office.draw()
 	if gameState.room == 'Intro' then
-	poly:draw('fill')
+	poly:draw('line')
 end
 end
