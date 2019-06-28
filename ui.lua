@@ -1,21 +1,13 @@
 require 'logging'
+require 'helper'
 
 ui = {}
-
-MESSAGE_CLICK, MESSAGE_OVER = 0, 1
 local resources = {}
-local buttons = {}
-local subscribers = {}
-ui.loaded = false
+MESSAGE_CLICK, MESSAGE_OVER = 0, 1
+local BSTATE_DEFAULT, BSTATE_OVER, BSTATE_CLICK = 1, 2, 3
 
 function ui.MouseOver(button)
 	local mx, my = love.mouse.getPosition()
-	log(tostring(button.x) .. "\n")
-	log(tostring(button.y) .. "\n")
-	log(tostring(button.w) .. "\n")
-	log(tostring(button.h) .. "\n")
-	log(tostring(mx) .. "\n")
-	log(tostring(my) .. "\n\n")
 	if  mx > button.x and mx < button.x + button.w and my > button.y and my < button.y + button.h then
 		return true
 	end
@@ -37,77 +29,90 @@ function ui.ButtonImages(default, over, click)
 	end
 	index = #resources + 1
 	resources[index] = {}
-	resources[index].default = assert(love.graphics.newImage(default))
-	resources[index].over = assert(love.graphics.newImage(over))
-	resources[index].click = assert(love.graphics.newImage(click))
-	return index
+	resources[index][BSTATE_DEFAULT] = assert(love.graphics.newImage(default))
+	resources[index][BSTATE_OVER] = assert(love.graphics.newImage(over))
+	resources[index][BSTATE_CLICK] = assert(love.graphics.newImage(click))
+	return resources[index]
 end
 
-function ui.CreateButton(x, y, w, h, id, text, resIndex)
-	index = #buttons + 1
-	buttons[index] = {}
-	buttons[index].x = x
-	buttons[index].y = y
-	buttons[index].w = w
-	buttons[index].h = h
-	buttons[index].scalex = w / resources[resIndex].default:getWidth()
-	buttons[index].scaley = h / resources[resIndex].default:getHeight()
-	buttons[index].id = id
-	buttons[index].text = text
-	buttons[index].resIndex = resIndex
-	buttons[index].current = resources[resIndex].default
+function ui.CreateButton(_ui, x, y, w, h, id, text, resource)
+	index = #_ui.buttons + 1
+	_ui.buttons[index] = {}
+	_ui.buttons[index].x = x
+	_ui.buttons[index].y = y
+	_ui.buttons[index].w = w
+	_ui.buttons[index].h = h
+	_ui.buttons[index].scalex = w / resource[BSTATE_DEFAULT]:getWidth()
+	_ui.buttons[index].scaley = h / resource[BSTATE_DEFAULT]:getHeight()
+	_ui.buttons[index].id = id
+	_ui.buttons[index].text = text
+	_ui.buttons[index].resource = resource --nadeus chto reference a ne vse copyd
+	_ui.buttons[index].current = BSTATE_DEFAULT
 end
 
-function ui.DispatchMessage(_type, msg)
-	for _,s in ipairs(subscribers) do
+function ui.DispatchMessage(_ui, _type, msg)
+	for _,s in ipairs(_ui.subscribers) do
 		s(_type, msg)
 	end
 end
 
-function ui.subscribe(func)
-	index = #subscribers + 1
+function ui.subscribe(_ui, func)
+	index = #_ui.subscribers + 1
 	--subscribers[index] = {}
-	subscribers[index] = func
+	_ui.subscribers[index] = func
 end
 
-function ui.load()
-	ui.loaded = true
-	resources = {}
-	buttons = {}
+function ui.DestroyResource(param)
+	param = nil
+	resources = CleanNils(resources)
+	collectgarbage('collect')
 end
 
-function ui.unload()
-	ui.loaded = false
-	resources = nil
-	buttons = nil
+function ui.create()
+	local new = {}
+	new.buttons = {}
+	new.subscribers = {}
+	return new
 end
 
-function ui.update(dt)
+function ui.destroy(param)
+	param.buttons = nil
+	param.subcribers = nil
+	param = nil
+	collectgarbage('collect')
+end
+
+function ui.update(_ui, dt)
 	local down = love.mouse.isDown(1)
-	for _,b in ipairs(buttons) do
-		if (ui.MouseOver(b)) then
-			ui.DispatchMessage(MESSAGE_OVER, b.id)
-			if (down) then
-				b.current = resources[b.resIndex].click
+	for _,b in ipairs(_ui.buttons) do
+		if (b.current == BSTATE_DEFAULT) then
+			if (ui.MouseOver(b)) then
+				b.current = BSTATE_OVER
+				ui.DispatchMessage(_ui, MESSAGE_OVER, b.id)
+			end
+		elseif (b.current == BSTATE_OVER) then
+			if (not ui.MouseOver(b)) then
+				b.current = BSTATE_DEFAULT
 			else
-				if (b.current == resources[b.resIndex].click) then
-					b.current = resources[b.resIndex].over
-					ui.DispatchMessage(MESSAGE_CLICK, b.id)
-					return
-				else
-					b.current = resources[b.resIndex].over
+				if (down) then
+					b.current = BSTATE_CLICK
 				end
 			end
-		else
-			b.current = resources[b.resIndex].default
+		elseif (b.current == BSTATE_CLICK) then
+			if (not ui.MouseOver(b)) then
+				b.current = BSTATE_DEFAULT
+			elseif (not down) then
+				ui.DispatchMessage(_ui, MESSAGE_CLICK, b.id)
+				b.current = BSTATE_OVER
+			end
 		end
 	end
 end
 
-function ui.draw()
+function ui.draw(_ui)
 	love.graphics.setColor(1,1,1)
-	for _,b in ipairs(buttons) do
-		love.graphics.draw(b.current, b.x, b.y, 0, b.scalex, b.scaley)
+	for _,b in ipairs(_ui.buttons) do
+		love.graphics.draw(b.resource[b.current], b.x, b.y, 0, b.scalex, b.scaley)
 		love.graphics.setColor(0,0,0)
 		love.graphics.printf(b.text, b.x, b.y + b.h/2, b.w, "center")
 		love.graphics.setColor(1,1,1)

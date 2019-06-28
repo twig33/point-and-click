@@ -3,7 +3,7 @@ gameState = {}
 gameState.player = {}
 gameState.pickups = {}
 
-GAMESTATE_NULL, GAMESTATE_MAINMENU, GAMESTATE_GAME, GAMESTATE_CREDITS = 0, 1, 2, 3 --"""""enum"""""
+GAMESTATE_NULL, GAMESTATE_MAINMENU, GAMESTATE_GAME, GAMESTATE_PAUSE, GAMESTATE_CREDITS = 0, 1, 2, 3, 4 --"""""enum"""""
 ROOM_NULL, ROOM_INTRO = 0, 1
 GAME_NEWGAME, GAME_CONTINUE = 1, 2
 
@@ -40,9 +40,9 @@ function gameStateInit()
 
 end
 
-function changeGameState(staet, unload, param)
-	param = param or nil
-	unload = unload or true
+function ChangeGameState(staet, unload, param)
+	if (unload == nil) then unload = true end
+	log("Unloading gamestate " .. tostring(staet) .. "unload = " .. tostring(unload) .. "\n")
 	if (gameState.state ~= GAMESTATE_NULL and unload == true) then
 		GameState[gameState.state].unload()
 	end
