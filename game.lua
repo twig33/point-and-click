@@ -3,6 +3,7 @@ require "rooms/intro"
 require "gameState"
 
 game={}
+game.ui = {}
 game.loaded = false
 local Room = 
 {
@@ -24,6 +25,8 @@ function game.load(param)
 		game.changeRoom(ROOM_INTRO)
 	end
 	adachi.load()
+	game.ui = ui.create()
+	ui.CreateButton(game.ui, 100, 100, 50, 50, 22, "adachi kill", SharedResources.mainButtons)
 end
 function game.unload()
 	game.loaded = false
@@ -32,9 +35,14 @@ end
 function game.draw()
 	love.graphics.setColor(1, 1, 1)
 	Room[gameState.room].draw()
+	ui.draw(game.ui)
 	adachi.draw()
 	return
 end
 function game.update(dt)
+	ui.update(game.ui, dt)
 	adachi.update(dt)
+	if (love.keyboard.isDown("escape")) then
+		ChangeGameState(GAMESTATE_PAUSE, false)
+	end
 end

@@ -2,6 +2,8 @@ require "system"
 require "gameState"
 
 title={}
+title.ui = {}
+title.resources = {}
 title.loaded = false
 buttons = {}
 maintitle = nil
@@ -12,7 +14,8 @@ function title.receive(_type, msg)
 	log("message: " .. tostring(msg) .. "\n")
 	if (_type == MESSAGE_CLICK) then
 		if (msg == 11) then 
-			changeGameState(GAMESTATE_GAME, true, GAME_NEWGAME)
+			ChangeGameState(GAMESTATE_GAME, true, GAME_NEWGAME)
+			title.unload()
 		end
 	elseif (_type == MESSAGE_OVER) then
 		if (msg == 11) then
@@ -24,28 +27,26 @@ function title.receive(_type, msg)
 end
 
 function title.load()
-title.loaded = true
-maintitle = love.graphics.newImage('img/titulo.png')
---buttons[3] = {150, WINDOW_HEIGHT - 50, 360, 72, ""}; bottomTextIndex = 3; --bottom text
-
-if (ui.loaded ~= true) then
-	ui.load()
-end
-resource = ui.ButtonImages('img/default.png','img/over.png','img/click.png')
-ui.CreateButton(400,300,360,72,11,"New game",resource)
-ui.CreateButton(400,400,360,72,12,"Continue",resource) 
-ui.subscribe(title.receive)
+	title.loaded = true
+	maintitle = love.graphics.newImage('img/titulo.png')
+	--buttons[3] = {150, WINDOW_HEIGHT - 50, 360, 72, ""}; bottomTextIndex = 3; --bottom text
+	title.ui = ui.create()
+	ui.CreateButton(title.ui, 400,300,360,72,11,"New game",SharedResources.mainButtons)
+	ui.CreateButton(title.ui, 400,400,360,72,12,"Continue",SharedResources.mainButtons) 
+	ui.subscribe(title.ui, title.receive)
 end
 
 function title.unload()
-title.loaded = false
-maintitle = nil
-buttons = nil
-ui.unload()
+	title.loaded = false
+	maintitle = nil
+	buttons = nil
+	--ui.DestroyResource(title.resources)
+	ui.destroy(title.ui)
+	collectgarbage('collect')
 end
 
 function title.update(dt)
-	ui.update(dt)
+	ui.update(title.ui, dt)
 	return true
 end
 
@@ -56,5 +57,5 @@ function title.draw()
 		love.graphics.printf("CAVERN", 0, 140 , 400, "center")
 	love.graphics.setColor(1,0,0)
 		love.graphics.printf(message, 160, 430, 400, "left")
-	ui.draw()
+	ui.draw(title.ui)
 end
