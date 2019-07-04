@@ -3,27 +3,31 @@ require 'game'
 
 pause = {}
 pause.loaded = false
-pause.ui = {}
-pause.blur = {}
-pause.blurscalex = 0
-pause.blurscaley = 0
+
 
 function pause.receive(_type, msg)
 	if (_type == MESSAGE_CLICK) then
 		if (msg == 9) then
 			ChangeGameState(GAMESTATE_GAME, true, GAME_NEWGAME)
+		elseif (msg == 10) then
+			ChangeGameState(GAMESTATE_MAINMENU, true)
 		end
 	end
 end
 
 function pause.load()
+	pause.ui = {}
+	pause.blur = {}
+	pause.blur.scalex = 0
+	pause.blur.scaley = 0
 	pause.loaded = true
 	pause.ui = ui.create()
 	ui.subscribe(pause.ui, pause.receive)
-	ui.CreateButton(pause.ui, WINDOW_WIDTH / 2 - 100,300,200,72,9,"Resume",SharedResources.mainButtons)
-	pause.blur = love.graphics.newImage('img/blur.png')
-	pause.blurscalex = WINDOW_WIDTH / pause.blur:getWidth()
-	pause.blurscaley = WINDOW_HEIGHT / pause.blur:getHeight()
+	ui.CreateButton(pause.ui, WINDOW_WIDTH / 2 - 100,200,200,72,9,"Resume",SharedResources.mainButtons)
+	ui.CreateButton(pause.ui, WINDOW_WIDTH / 2 - 100, 280, 200, 72, 10, "Main Menu", SharedResources.mainButtons)
+	pause.blur.image = love.graphics.newImage('img/blur.png')
+	pause.blur.scalex = WINDOW_WIDTH / pause.blur.image:getWidth()
+	pause.blur.scaley = WINDOW_HEIGHT / pause.blur.image:getHeight()
 end
 function pause.unload()
 	pause.loaded = false
@@ -36,6 +40,6 @@ function pause.update(dt)
 end
 function pause.draw()
 	game.draw()
-	love.graphics.draw(pause.blur, 0, 0, 0, pause.blurscalex, pause.blurscaley)
+	love.graphics.draw(pause.blur.image, 0, 0, 0, pause.blur.scalex, pause.blur.scaley)
 	ui.draw(pause.ui)
 end
