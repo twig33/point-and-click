@@ -45,18 +45,7 @@ function adachi.keypressed(key,dt)
    if keyDown == "escape" then
       love.event.quit()
    end
-	if sDown then
-		gameState.player.y  = gameState.player.y  - 100 * dt
-	end
-	if dDown then
-		 gameState.player.x  = gameState.player.x - 100 * dt
-	end
-	if aDown then
-		 gameState.player.x  = gameState.player.x + 100 * dt
-	end
-	if wDown then
-		gameState.player.y  = gameState.player.y + 100 * dt
-	end
+
 end
 function adachi.draw()
 adachi.hitbox:draw('fill')
@@ -71,27 +60,58 @@ wDown = false
 sDown = false
 aDown = false
 dDown = false
-  if love.keyboard.isDown("w") then 
-	wDown = true
-   gameState.player.y  = gameState.player.y  - 100 * dt
-   adachi.animation = adachi.animations.up;
-  end
-  if love.keyboard.isDown("s") then
+if love.keyboard.isDown("w") then 
+		wDown = true
+   		gameState.player.y  = gameState.player.y  - 100 * dt
+adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
+ 		for shape, delta in pairs(HC.collisions(adachi.hitbox)) do
+  		 if shape:collidesWith(adachi.hitbox) then	
+			gameState.player.y  = gameState.player.y + 100 * dt
+			adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
+		 end
+		end
+  		adachi.animation = adachi.animations.up;
+end
+  
+
+if love.keyboard.isDown("s") then
 		sDown = true
-	gameState.player.y  = gameState.player.y + 100 * dt
-   adachi.animation = adachi.animations.down;
+		gameState.player.y  = gameState.player.y + 100 * dt
+adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
+		adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
+ 		for shape, delta in pairs(HC.collisions(adachi.hitbox)) do
+   		 if shape:collidesWith(adachi.hitbox) then	
+			gameState.player.y  = gameState.player.y - 100 * dt
+			adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
+		 end
+		end
+	        adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
+  		adachi.animation = adachi.animations.down;
  
   end
   if love.keyboard.isDown("a") then 
-   gameState.player.x  = gameState.player.x - 100 * dt
-   adachi.animation = adachi.animations.left;
+	 gameState.player.x  = gameState.player.x - 100 * dt
+   	 adachi.animation = adachi.animations.left;
+adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
+ 	 for shape, delta in pairs(HC.collisions(adachi.hitbox)) do
+	  if shape:collidesWith(adachi.hitbox) then	
+		gameState.player.x  = gameState.player.x + 100 * dt
+		adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
+	 end
+	end
 	aDown = true
   end
   if love.keyboard.isDown("d") then 
 	dDown = true
-   gameState.player.x  = gameState.player.x + 100 * dt
+   	gameState.player.x  = gameState.player.x + 100 * dt
+adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
+ 	for shape, delta in pairs(HC.collisions(adachi.hitbox)) do
+   	 if shape:collidesWith(adachi.hitbox) then	
+		gameState.player.x  = gameState.player.x - 100 * dt
+		adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
+	 end
+	end
    adachi.animation = adachi.animations.right;
-
-end
+ end
 
 end
