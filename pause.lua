@@ -22,16 +22,16 @@ function pause.load()
 	pause.blur.scaley = 0
 	pause.loaded = true
 	pause.ui = ui.create()
-	ui.subscribe(pause.ui, pause.receive)
-	ui.CreateButton(pause.ui, WINDOW_WIDTH / 2 - 100,200,200,72,9,"Resume",SharedResources.mainButtons)
-	ui.CreateButton(pause.ui, WINDOW_WIDTH / 2 - 100, 280, 200, 72, 10, "Main Menu", SharedResources.mainButtons)
+	pause.ui:subscribe(pause.receive)
+	pause.ui:CreateButton(WINDOW_WIDTH / 2 - 100,200,200,72,9,"Resume",SharedResources.mainButtons)
+	pause.ui:CreateButton(WINDOW_WIDTH / 2 - 100, 280, 200, 72, 10, "Main Menu", SharedResources.mainButtons)
 	pause.blur.image = love.graphics.newImage('img/blur.png')
 	pause.blur.scalex = WINDOW_WIDTH / pause.blur.image:getWidth()
 	pause.blur.scaley = WINDOW_HEIGHT / pause.blur.image:getHeight()
 end
 function pause.unload()
 	pause.loaded = false
-	pause.ui = nil
+	pause.ui:destroy()
 	pause.blur = nil
 	collectgarbage('collect')
 end
@@ -41,5 +41,5 @@ end
 function pause.draw()
 	game.draw()
 	love.graphics.draw(pause.blur.image, 0, 0, 0, pause.blur.scalex, pause.blur.scaley)
-	ui.draw(pause.ui)
+	pause.ui:draw()
 end

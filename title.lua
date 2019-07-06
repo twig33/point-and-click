@@ -1,6 +1,5 @@
 require "system"
 require "gameState"
-
 title={}
 title.ui = {}
 title.resources = {}
@@ -30,10 +29,10 @@ function title.load()
 	title.loaded = true
 	maintitle = love.graphics.newImage('img/titulo.png')
 	--buttons[3] = {150, WINDOW_HEIGHT - 50, 360, 72, ""}; bottomTextIndex = 3; --bottom text
-	title.ui = ui.create()
-	ui.CreateButton(title.ui, 400,300,360,72,11,"New game",SharedResources.mainButtons)
-	ui.CreateButton(title.ui, 400,400,360,72,12,"Continue",SharedResources.mainButtons) 
-	ui.subscribe(title.ui, title.receive)
+	title.ui = ui:create()
+	title.ui:CreateButton(400,300,360,72,11,"New game",SharedResources.mainButtons)
+	title.ui:CreateButton(400,400,360,72,12,"Continue",SharedResources.mainButtons) 
+	title.ui:subscribe(title.receive)
 end
 
 function title.unload()
@@ -41,12 +40,12 @@ function title.unload()
 	maintitle = nil
 	buttons = nil
 	--ui.DestroyResource(title.resources)
-	ui.destroy(title.ui)
+	title.ui:destroy()
 	collectgarbage('collect')
 end
 
 function title.update(dt)
-	ui.update(title.ui, dt)
+	title.ui:update(dt)
 	return true
 end
 
@@ -57,5 +56,7 @@ function title.draw()
 		love.graphics.printf("CAVERN", 0, 140 , 400, "center")
 	love.graphics.setColor(1,0,0)
 		love.graphics.printf(message, 160, 430, 400, "left")
-	ui.draw(title.ui)
+	title.ui:draw()
+	love.graphics.setColor(0,0,0)
+	--love.graphics.polygon('fill', title.objects[1].polygon:unpack())
 end
