@@ -27,12 +27,12 @@ ClickSubscribers = {}
 --local game = require 'game'
 --local gameState = require 'gameState'
 
-function SubscribeToClick(func)
-	ClickSubscribers[#ClickSubscribers + 1] = func
+function SubscribeToClick(subscriber)
+	ClickSubscribers[#ClickSubscribers + 1] = subscriber
 end
 function love.mousepressed( x, y, button, istouch, presses )
 	for _, s in ipairs(ClickSubscribers) do
-		s(x, y, button, istouch, presses)
+		s:mousepressed(x, y, button, istouch, presses)
 	end
 end
 function love.load()

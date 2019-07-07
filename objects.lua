@@ -1,12 +1,14 @@
 Polygon = require 'lib.hardoncollider.polygon'
+require 'PointWithinShape'
 require 'logging'
+require 'message'
 
 objects = {}
 objects.__index = objects
 
 --internal functions
 function objects:IndexByID(id)
-	for i=1,#self,+1 do
+	for i=1,#self,1 do
 		if (self[i].id == id) then
 			return i
 		end
@@ -16,33 +18,76 @@ function objects:IndexByID(id)
 end
 
 function objects:AddObjectResources(index, path, ...)
-	if (path) then
-		self[index].resources.paths[#(self[index].resources.paths) + 1] = path
-		self[index].resources.imgs[#(self[index].resources.imgs) + 1] = love.graphics.newImage(path)
-		return self.AddObjectResources(index, ...)
+	if (path ~= nil) then
+		if (type(path) == 'number') then
+			local resindex = self:IndexByID(path)
+			local pathindex = #(self[index].resources.paths) + 1
+			local imgindex = #(self[index].resources.imgs) + 1
+			self[index].resources.paths[pathindex] = self[resindex].resources.paths[pathindex]
+			self[index].resources.imgs[imgindex] = self[resindex].resources.imgs[imgindex]
+			log("Added resource " .. self[index].resources.paths[pathindex] .. " from existing object id " .. tostring(path) .. "\n")
+		else
+			self[index].resources.paths[#(self[index].resources.paths) + 1] = path
+			self[index].resources.imgs[#(self[index].resources.imgs) + 1] = love.graphics.newImage(path)
+			log("Added resource " .. path .. "\n")
+		end
+		return self:AddObjectResources(index, ...)
 	else
-		return #(self[index].resources)
+		return #(self[index].resources.paths)
 	end
 end
 
 function objects.CollisionImage(path)
-	local col = love.graphics.newImage(path)
-	local w = col:getWidth()
-	local h = col:getHeight()
-	local imgdata = col:getData()
-	local red = {}
-	for y=0, h, +1 do
-		for x=0, w, +1 do
+	local green = {}
+	local imgdata = love.image.newImageData(path)
+	local w = imgdata:getWidth()
+	local h = imgdata:getHeight()
+	local greenvertices = {}
+	for y=0, h-1, 1 do
+		for x=0, w-1, 1 do
 			local r, g, b, a = imgdata:getPixel(x, y)
-			if (r == 1) then
-				red[#red + 1] = x
-				red[#red + 1] = y
+			if (r == 0 and g ~= 0 and b == 0) then --if pixel is green
+				i=1
+				while (i <= #green) do --look for place to insert (rtbl is sorted biggest to smallest)
+					if (green[i] <= g) then --if r at this place is smaller or equal can insert here
+						for a=#green,i,-1 do --make space for the new r
+							green[a + 1] =  green[a]
+							greenvertices[a*2-1+2] = greenvertices[a*2-1]
+							greenvertices[a*2+2] = greenvertices[a*2]
+						end
+						break
+					end
+					i = i + 1
+				end
+				green[i] = g
+				greenvertices[i*2-1] = x
+				greenvertices[i*2] = y
 			end
 		end
 	end
-	col = nil
 	imgdata = nil
-	return unpack(red)
+	log(tostring(#green) .. " vertices from " .. path)
+	for i=1,#green,1 do
+		log(" " .. tostring(green[i]))
+	end
+	log("\n")
+	return unpack(greenvertices)
+end
+
+function objects:DispatchMessage(_type, msg)
+	for _, s in ipairs(self.subscribers) do
+		s(_type, msg)
+	end
+end
+
+function objects:mousepressed(x, y, button, istouch, presses)
+	local x, y = love.mouse.getPosition()
+	for i=#self,1,-1 do
+		if (PointWithinShape(self[i].polygon.vertices, x, y)) then
+			self:DispatchMessage(MESSAGE_CLICK, self[i].id)
+			return
+		end
+	end
 end
 
 --external functions
@@ -54,7 +99,7 @@ function objects:UnloadAllResources()
 end
 
 function objects:LoadAllResources()
-	for i=1, #self,+1 do
+	for i=1, #self,1 do
 		self:AddObjectResources(i, unpack(_objects[i].resources.paths))
 	end
 end
@@ -72,11 +117,30 @@ function objects:SetObjectState(id, state)
 	self[index].state = state
 end
 
-function objects:MoveObject(id, x, y)
-	local index = objects:IndexByID(id)
+function objects:MoveObject(id, x, y, z)
+	local index = self:IndexByID(id)
+	self[index].polygon:move(x - self[index].x, y - self[index].y) --polygon move function moves by, not to
 	self[index].x = x
 	self[index].y = y
-	self[index].polygon:move(x, y)
+	if (z ~= nil) and (z ~= self[index].z) then
+		self[index].z = z
+		copy = self[index] --original will be overwritten
+		for i=1,#self,1 do
+			if (self[i].z > z) then
+				if (index < i) then
+					for a=index,i-1,1 do
+						self[a] = self[a+1]
+					end
+				elseif (i < index) then
+					for a=i,index-1,-1 do
+						self[a+1] = self[a]
+					end
+				end
+				self[i] = copy
+				return
+			end
+		end
+	end
 end
 
 function objects:DestroyObject(id)
@@ -85,8 +149,7 @@ function objects:DestroyObject(id)
 		log("error Cant destroy object\n")
 		return
 	end
-	self[index] = nil
-	self = CleanNils(self)
+	TableDelete(self, index)
 	log("Object " .. tostring(id) .. " destroyed\n")
 end
 
@@ -96,32 +159,51 @@ function objects:CreateObject(id, colpath, ...) -- first collision image path th
 	self[index] = {}
 	self[index].id = id
 	self[index].state = 1
+	self[index].resources = {}
 	self[index].resources.imgs = {}
 	self[index].resources.paths = {}
 	self[index].x = 0
 	self[index].y = 0
+	self[index].z = 0
 	local resnum = self:AddObjectResources(index, ...)
 	assert(resnum, "No resources for object " .. tostring(index))
-	log(tostring(resnum) .. " resources loaded for object " .. tostring(index) .. "\n")
-	self[index].polygon = Polygon(objects.CollisionImage(colpath))
+	log(tostring(resnum) .. " resources loaded for object " .. tostring(id) .. "\n")
+	if (type(colpath) == 'number') then
+		log("Loading polygon data from existing object id " .. tostring(colpath) .. "\n")
+		local resindex = self:IndexByID(colpath)
+		self[index].polygon = self[resindex].polygon:clone()
+	else
+		self[index].polygon = Polygon(objects.CollisionImage(colpath))
+	end
+end
+
+function objects:subscribe(func)
+	assert(func ~= nil, "fuck")
+	self.subscribers[#self.subscribers + 1] = func
 end
 
 function objects:draw()
 	for _, obj in ipairs(self) do
-		--love.graphics.draw(ssss
+		love.graphics.setColor(1,1,1)
+		love.graphics.draw(obj.resources.imgs[obj.state], obj.x, obj.y)
+		love.graphics.setColor(0,0.75,0)
+		love.graphics.polygon('line', obj.polygon:unpack())
 	end
 end
 
-function objects.destroy(param)
-	param = nil
+function objects:update(dt)
+	return
+end
+
+function objects:destroy()
+	self = nil
 	collectgarbage('collect')
 end
 
 function objects:create()
 	local tbl = {}
 	setmetatable(tbl, objects)
+	tbl.subscribers = {}
+	SubscribeToClick(tbl)
 	return tbl
 end 
-
-
- 

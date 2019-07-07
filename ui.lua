@@ -1,10 +1,10 @@
 require 'logging'
 require 'helper'
+require 'message'
 
 ui = {}
 ui.__index = ui
 local resources = {}
-MESSAGE_CLICK, MESSAGE_OVER = 0, 1
 local BSTATE_DEFAULT, BSTATE_OVER, BSTATE_CLICK = 1, 2, 3
 
 function ui.MouseOver(button)

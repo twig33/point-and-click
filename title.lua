@@ -27,7 +27,7 @@ end
 
 function title.load()
 	title.loaded = true
-	maintitle = love.graphics.newImage('img/titulo.png')
+	maintitle = love.graphics.newImage('img/adachi.png')
 	--buttons[3] = {150, WINDOW_HEIGHT - 50, 360, 72, ""}; bottomTextIndex = 3; --bottom text
 	title.ui = ui:create()
 	title.ui:CreateButton(400,300,360,72,11,"New game",SharedResources.mainButtons)
