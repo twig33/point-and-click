@@ -1,9 +1,10 @@
 require 'logging'
 require 'helper'
+require 'message'
 
 ui = {}
+ui.__index = ui
 local resources = {}
-MESSAGE_CLICK, MESSAGE_OVER = 0, 1
 local BSTATE_DEFAULT, BSTATE_OVER, BSTATE_CLICK = 1, 2, 3
 
 function ui.MouseOver(button)
@@ -35,60 +36,61 @@ function ui.ButtonImages(default, over, click)
 	return resources[index]
 end
 
-function ui.CreateButton(_ui, x, y, w, h, id, text, resource)
-	index = #_ui.buttons + 1
-	_ui.buttons[index] = {}
-	_ui.buttons[index].x = x
-	_ui.buttons[index].y = y
-	_ui.buttons[index].w = w
-	_ui.buttons[index].h = h
-	_ui.buttons[index].scalex = w / resource[BSTATE_DEFAULT]:getWidth()
-	_ui.buttons[index].scaley = h / resource[BSTATE_DEFAULT]:getHeight()
-	_ui.buttons[index].id = id
-	_ui.buttons[index].text = text
-	_ui.buttons[index].resource = resource --nadeus chto reference a ne vse copyd
-	_ui.buttons[index].current = BSTATE_DEFAULT
+function ui:CreateButton(x, y, w, h, id, text, resource)
+	index = #self.buttons + 1
+	self.buttons[index] = {}
+	self.buttons[index].x = x
+	self.buttons[index].y = y
+	self.buttons[index].w = w
+	self.buttons[index].h = h
+	self.buttons[index].scalex = w / resource[BSTATE_DEFAULT]:getWidth()
+	self.buttons[index].scaley = h / resource[BSTATE_DEFAULT]:getHeight()
+	self.buttons[index].id = id
+	self.buttons[index].text = text
+	self.buttons[index].resource = resource --nadeus chto reference a ne vse copyd
+	self.buttons[index].current = BSTATE_DEFAULT
 end
 
-function ui.DispatchMessage(_ui, _type, msg)
-	for _,s in ipairs(_ui.subscribers) do
+function ui:DispatchMessage(_type, msg)
+	for _,s in ipairs(self.subscribers) do
 		s(_type, msg)
 	end
 end
 
-function ui.subscribe(_ui, func)
-	index = #_ui.subscribers + 1
+function ui:subscribe(func)
+	index = #self.subscribers + 1
 	--subscribers[index] = {}
-	_ui.subscribers[index] = func
+	self.subscribers[index] = func
 end
 
-function ui.DestroyResource(param)
+function ui:DestroyResource(param)
 	param = nil
 	resources = CleanNils(resources)
 	collectgarbage('collect')
 end
 
-function ui.create()
+function ui:create()
 	local new = {}
+	setmetatable(new, ui)
 	new.buttons = {}
 	new.subscribers = {}
 	return new
 end
 
-function ui.destroy(param)
-	param.buttons = nil
-	param.subcribers = nil
-	param = nil
+function ui:destroy()
+	self.buttons = nil
+	self.subcribers = nil
+	self = nil
 	collectgarbage('collect')
 end
 
-function ui.update(_ui, dt)
+function ui:update(dt)
 	local down = love.mouse.isDown(1)
-	for _,b in ipairs(_ui.buttons) do
+	for _,b in ipairs(self.buttons) do
 		if (b.current == BSTATE_DEFAULT) then
 			if (ui.MouseOver(b)) then
 				b.current = BSTATE_OVER
-				ui.DispatchMessage(_ui, MESSAGE_OVER, b.id)
+				self:DispatchMessage(MESSAGE_OVER, b.id)
 			end
 		elseif (b.current == BSTATE_OVER) then
 			if (not ui.MouseOver(b)) then
@@ -102,16 +104,16 @@ function ui.update(_ui, dt)
 			if (not ui.MouseOver(b)) then
 				b.current = BSTATE_DEFAULT
 			elseif (not down) then
-				ui.DispatchMessage(_ui, MESSAGE_CLICK, b.id)
+				self:DispatchMessage(MESSAGE_CLICK, b.id)
 				b.current = BSTATE_OVER
 			end
 		end
 	end
 end
 
-function ui.draw(_ui)
+function ui:draw()
 	love.graphics.setColor(1,1,1)
-	for _,b in ipairs(_ui.buttons) do
+	for _,b in ipairs(self.buttons) do
 		love.graphics.draw(b.resource[b.current], b.x, b.y, 0, b.scalex, b.scaley)
 		love.graphics.setColor(0,0,0)
 		love.graphics.printf(b.text, b.x, b.y + b.h/2, b.w, "center")

@@ -8,6 +8,7 @@ require 'dbg'
 require 'title'
 require 'game'
 require 'pause'
+objectst = require 'objectst'
 
 GameState = 
 {
@@ -20,12 +21,20 @@ local player = require 'player'
 local TIME = 5
 local timer = TIME
 SharedResources = {}
+ClickSubscribers = {}
 
 --local title = require 'title'
 --local game = require 'game'
 --local gameState = require 'gameState'
 
-
+function SubscribeToClick(subscriber)
+	ClickSubscribers[#ClickSubscribers + 1] = subscriber
+end
+function love.mousepressed( x, y, button, istouch, presses )
+	for _, s in ipairs(ClickSubscribers) do
+		s:mousepressed(x, y, button, istouch, presses)
+	end
+end
 function love.load()
 	--adachi.load()
 	--title.load()
@@ -35,6 +44,8 @@ function love.load()
 	gameStateInit()
 	gameState.state = GAMESTATE_NULL
 	ChangeGameState(GAMESTATE_MAINMENU)
+	--objectstest = objectst(10)
+	--log(tostring(objectstest.e) .. "\n")
 	--office.load()
 	--bg = love.graphics.newImage('img/oz_screen6.jpg')
 	debug.load()
