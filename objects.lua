@@ -48,9 +48,9 @@ function objects.CollisionImage(path)
 			local r, g, b, a = imgdata:getPixel(x, y)
 			if (r == 0 and g ~= 0 and b == 0) then --if pixel is green
 				i=1
-				while (i <= #green) do --look for place to insert (rtbl is sorted biggest to smallest)
-					if (green[i] <= g) then --if r at this place is smaller or equal can insert here
-						for a=#green,i,-1 do --make space for the new r
+				while (i <= #green) do --look for place to insert (green is sorted biggest to smallest)
+					if (green[i] <= g) then --if green at this place is smaller or equal can insert here
+						for a=#green,i,-1 do --make space for the new green
 							green[a + 1] =  green[a]
 							greenvertices[a*2-1+2] = greenvertices[a*2-1]
 							greenvertices[a*2+2] = greenvertices[a*2]
@@ -172,6 +172,7 @@ function objects:CreateObject(id, colpath, ...) -- first collision image path th
 		log("Loading polygon data from existing object id " .. tostring(colpath) .. "\n")
 		local resindex = self:IndexByID(colpath)
 		self[index].polygon = self[resindex].polygon:clone()
+		self[index].polygon:move(0 - self[resindex].x, 0 - self[resindex].y)
 	else
 		self[index].polygon = Polygon(objects.CollisionImage(colpath))
 	end
