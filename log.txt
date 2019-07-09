@@ -1,0 +1,4 @@
+Init
+File dropped C:\point and click\collider-maker\key.png
+skeycol.png
+C:/point and click/point-and-click/collider-maker/keycol.png
