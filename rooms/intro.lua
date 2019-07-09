@@ -20,7 +20,7 @@ function intro.load()
 	intro.objects = objects:create()
 	intro.objects:subscribe(introreceivepoly) --esli s tochkoi to intro.receivepoly budet nil v object subscribers
 	intro.objects:CreateObject(11, 'img/keycol.png', 'img/key.png')
-	intro.objects:MoveObject(11, 0, 0, 5)
+	intro.objects:MoveObject(11, 300, 100, 5)
 	intro.objects:CreateObject(12, 11, 11)
 	intro.objects:MoveObject(12, 475, 475, 1)
 	intro.objects:CreateObject(13, 11, 11)

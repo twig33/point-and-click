@@ -8,7 +8,7 @@ require 'dbg'
 require 'title'
 require 'game'
 require 'pause'
-objectst = require 'objectst'
+--objectst = require 'objectst'
 
 GameState = 
 {
