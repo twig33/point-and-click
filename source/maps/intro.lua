@@ -1,4 +1,4 @@
-require 'objects'
+require 'source.global.objects'
 
 intro = {}
 intro.loaded = false

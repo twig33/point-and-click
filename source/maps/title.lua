@@ -1,5 +1,5 @@
-require "system"
-require "gameState"
+require "source.startup.system"
+require "source.global.gameState"
 title={}
 title.ui = {}
 title.resources = {}

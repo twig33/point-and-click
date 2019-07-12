@@ -1,7 +1,5 @@
-require "animating"
-require "rooms/intro"
-require "gameState"
-
+require "source.global.gameState"
+require "source.maps.intro"
 game={}
 game.ui = {}
 game.loaded = false
