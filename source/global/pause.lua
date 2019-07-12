@@ -1,5 +1,5 @@
-require 'ui'
-require 'game'
+require 'source.ui.ui'
+require 'source.global.game'
 
 pause = {}
 pause.loaded = false

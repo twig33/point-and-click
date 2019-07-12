@@ -1,7 +1,7 @@
-Polygon = require 'lib.hardoncollider.polygon'
-require 'PointWithinShape'
-require 'logging'
-require 'message'
+Polygon = require 'source.lib.hardoncollider.polygon'
+require 'source.global.PointWithinShape'
+require 'source.debug.logging'
+require 'source.global.message'
 
 objects = {}
 objects.__index = objects

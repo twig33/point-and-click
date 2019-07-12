@@ -5,6 +5,6 @@ mapdata.transitions = {}
 mapdata.room = nil
 
 
-function changemap
+function changemap()
 
 end

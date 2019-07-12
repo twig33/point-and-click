@@ -1,28 +1,11 @@
-HC = require "lib.hardoncollider"
-require 'animating'
-require 'maps.office'
-require 'ui'
-require 'logging'
-require 'gameState'
-require 'dbg'
-require 'title'
-require 'game'
-require 'pause'
---objectst = require 'objectst'
 
-GameState = 
-{
-	[GAMESTATE_MAINMENU] = title,
-	[GAMESTATE_GAME] = game,
-	[GAMESTATE_PAUSE] = pause,
-}
-local updateGameplay = require("update")
-local player = require 'player'
-local TIME = 5
-local timer = TIME
+
+
 SharedResources = {}
 ClickSubscribers = {}
 
+local TIME = 5
+local timer = TIME
 --local title = require 'title'
 --local game = require 'game'
 --local gameState = require 'gameState'
@@ -36,10 +19,10 @@ function love.mousepressed( x, y, button, istouch, presses )
 	end
 end
 function love.load()
-	--adachi.load()
-	--title.load()
-	log("\n\nInit\n")
---	ui.load()
+
+	require("source/startup/startup")
+  	startup()
+		log("\n\nInit\n")
 	SharedResources.mainButtons = ui.ButtonImages('img/default.png','img/over.png','img/click.png')
 	gameStateInit()
 	gameState.state = GAMESTATE_NULL
@@ -50,6 +33,8 @@ function love.load()
 	--bg = love.graphics.newImage('img/oz_screen6.jpg')
 	debug.load()
 end
+
+
 function love.draw()
 	love.graphics.setColor(1, 1, 1)
 	--logfile:write("aaaa")
