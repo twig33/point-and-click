@@ -3,7 +3,7 @@
 Init
 Unloading gamestate 1unload = true
 type of message received 1
-message: 11
+message: 12
 type of message received 1
 message: 11
 type of message received 0
@@ -23,32 +23,6 @@ Added resource img/key.png from existing object id 11
 Loading polygon data from existing object id 11
 Received polygon message type 0 message 11
 Object 11 destroyed
-Memory used: 617.625 KB
+Memory used: 544.10546875 KB
 Received polygon message type 0 message 12
 Object 12 destroyed
-Received polygon message type 0 message 13
-Object 13 destroyed
-Memory used: 761.2197265625 KB
-Memory used: 851.1796875 KB
-Unloading gamestate 3unload = false
-Unloading gamestate 1unload = true
-type of message received 1
-message: 11
-type of message received 1
-message: 12
-type of message received 0
-message: 12
-Memory used: 468.0751953125 KB
-type of message received 1
-message: 12
-type of message received 0
-message: 12
-type of message received 0
-message: 12
-type of message received 1
-message: 11
-type of message received 0
-message: 11
-Unloading gamestate 2unload = true
-Unloading gamestate 3unload = false
-Unloading gamestate 2unload = true

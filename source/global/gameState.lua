@@ -14,12 +14,7 @@ function gameStateInit()
   gameState.saveCount = 0
 
   -- State stores if update functions should occur
-GameState = 
-{
-	[GAMESTATE_MAINMENU] = title,
-	[GAMESTATE_GAME] = game,
-	[GAMESTATE_PAUSE] = pause,
-}
+
   
   -- Stores the current room
   gameState.state = GAMESTATE_NULL
@@ -42,6 +37,13 @@ GameState =
 
   -- Changes to false after the tutorial text disappears
   gameState.tutorial = true
+
+GameState = 
+{
+	[GAMESTATE_MAINMENU] = title,
+	[GAMESTATE_GAME] = game,
+	[GAMESTATE_PAUSE] = pause,
+}
 
 end
 
