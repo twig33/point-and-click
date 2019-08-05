@@ -2,6 +2,7 @@ Polygon = require 'source.lib.hardoncollider.polygon'
 require 'source.global.PointWithinShape'
 require 'source.debug.logging'
 require 'source.global.message'
+anim8 = require 'source.lib.anim8.anim8'
 
 objects = {}
 objects.__index = objects
@@ -85,6 +86,7 @@ function objects:mousepressed(x, y, button, istouch, presses)
 	for i=#self,1,-1 do
 		if (PointWithinShape(self[i].polygon.vertices, x, y)) then
 			self:DispatchMessage(MESSAGE_CLICK, self[i].id)
+			log("lole mouse within shape \n")
 			return
 		end
 	end
@@ -186,13 +188,15 @@ end
 function objects:draw()
 	for _, obj in ipairs(self) do
 		love.graphics.setColor(1,1,1)
-		love.graphics.draw(obj.resources.imgs[obj.state], obj.x, obj.y)
+		love.graphics.draw(obj.resources.imgs[obj.state], obj.x, obj.y) 
+		
 		love.graphics.setColor(0,0.75,0)
 		love.graphics.polygon('line', obj.polygon:unpack())
 	end
 end
 
 function objects:update(dt)
+	--adachi.animation:update(dt)
 	return
 end
 

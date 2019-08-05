@@ -21,10 +21,11 @@ function getGlobals()
 
   require("source/maps/intro")
   require("source/maps/map")
-  require("source/maps/office")
+ -- require("source/maps/office")
   require("source/maps/street")
   require("source/maps/title")
 
   require("source/ui/ui")
 
+  require ("source/objects/key")
 end
