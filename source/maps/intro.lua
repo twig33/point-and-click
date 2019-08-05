@@ -1,5 +1,6 @@
 require 'source.global.objects'
 
+  require ("source/objects/key")
 intro = {}
 intro.loaded = false
 intro.objects = {}
@@ -23,8 +24,8 @@ function intro.load()
 	intro.objects:MoveObject(11, 300, 100, 5)
 	intro.objects:CreateObject(12, 11, 11)
 	intro.objects:MoveObject(12, 475, 475, 1)
-	intro.objects:CreateObject(13, 11, 11)
-	intro.objects:MoveObject(13, 450, 450, 3)
+	intro.objects:CreateObject(14, keyObject.colImg, keyObject.image)
+	intro.objects:MoveObject(14, 350, 450, 3)	--not removable?
 end
 function intro.unload()
 	intro = nil

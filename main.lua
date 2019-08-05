@@ -1,10 +1,10 @@
-SharedResources = {}	--comment
+SharedResources = {}
 ClickSubscribers = {}
 
 local TIME = 5
 local timer = TIME
 
-function SubscribeToClick(subscriber)	--comment
+function SubscribeToClick(subscriber)
 	ClickSubscribers[#ClickSubscribers + 1] = subscriber
 end
 function love.mousepressed( x, y, button, istouch, presses )
@@ -16,9 +16,11 @@ function love.load()
 
 	require("source/startup/startup")
   	startup()
+		log("\n\nInit\n")
 	SharedResources.mainButtons = ui.ButtonImages('img/default.png','img/over.png','img/click.png')
+	gameStateInit()
 	gameState.state = GAMESTATE_NULL
-	ChangeGameState(GAMESTATE_MAINMENU)	--move to startup or gameState
+	ChangeGameState(GAMESTATE_MAINMENU)
 	debug.load()
 end
 
@@ -27,6 +29,7 @@ function love.draw()
 	love.graphics.setColor(1, 1, 1)
 	--logfile:write("aaaa")
 	GameState[gameState.state].draw()
+	debug.mouseLocation()
 end
  
 function love.update( dt )
