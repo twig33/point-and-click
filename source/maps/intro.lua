@@ -5,7 +5,7 @@ intro = {}
 intro.loaded = false
 intro.objects = {}
 
-function introreceivepoly(_type, msg) --pochemuto tut esli tochku postavit posle intro to ne budet rabotat
+function introreceivepoly(_type, msg) --object monitoring function
 	log("Received polygon message type " .. tostring(_type) .. " message " .. tostring(msg) .. "\n")
 	if (_type == MESSAGE_CLICK) then
 		if (msg == 11 or msg == 12 or msg == 13) then
@@ -24,8 +24,8 @@ function intro.load()
 	intro.objects:MoveObject(11, 300, 100, 5)
 	intro.objects:CreateObject(12, 11, 11)
 	intro.objects:MoveObject(12, 475, 475, 1)
-	intro.objects:CreateObject(14, keyObject.colImg, keyObject.image)
-	intro.objects:MoveObject(14, 350, 450, 3)	--not removable?
+	intro.objects:CreateObject(13, 'img/keycol.png', 'img/key.png')
+	intro.objects:MoveObject(13, 350, 450, 3)
 end
 function intro.unload()
 	intro = nil
