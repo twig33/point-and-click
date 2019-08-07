@@ -33,13 +33,16 @@ end
 function game.draw()
 	love.graphics.setColor(1, 1, 1)
 	Room[gameState.room].draw()
-	game.ui:draw()
+			love.graphics.setColor(255,255,255,255)
 	adachi.draw()
+	game.ui:draw()
+	dialogue.draw()
 	return
 end
 function game.update(dt)
 	game.ui:update(dt)
 	adachi.update(dt)
+	 dialogue.update(dt)
 	if (love.keyboard.isDown("escape")) then
 		ChangeGameState(GAMESTATE_PAUSE, false)
 	end

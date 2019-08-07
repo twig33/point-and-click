@@ -15,16 +15,11 @@ Creating object 12
 Added resource img/key.png from existing object id 11
 1 resources loaded for object 12
 Loading polygon data from existing object id 11
-Creating object 14
+Creating object 13
 Added resource img/key.png
-1 resources loaded for object 14
+1 resources loaded for object 13
 18 vertices from img/keycol.png 1 0.9921568627451 0.98823529411765 0.9843137254902 0.97647058823529 0.97254901960784 0.96862745098039 0.96470588235294 0.95686274509804 0.95294117647059 0.94901960784314 0.94117647058824 0.93725490196078 0.93333333333333 0.92941176470588 0.92156862745098 0.91764705882353 0.91372549019608
-Received polygon message type 0 message 12
-Object 12 destroyed
-lole mouse within shape 
-Received polygon message type 0 message 14
-lole mouse within shape 
 Received polygon message type 0 message 11
 Object 11 destroyed
 lole mouse within shape 
-Memory used: 581.6728515625 KB
+Memory used: 690.4697265625 KB

@@ -7,6 +7,7 @@ keyObject =		--proposing passing "objects" rather than a set of arguments?
 	colides = true,
 	colImg = 'img/keycol.png',
 	image = 'img/key.png',
-	animation = anim8.newAnimation(grid('1-8',1), 0.1)
+	animation = anim8.newAnimation(grid('1-8',1), 0.1),
+	comment = 'haha epic'
 }
 

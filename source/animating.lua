@@ -1,4 +1,5 @@
 local anim8 = require 'source.lib.anim8.anim8'
+require 'source.objects.key'
 local image, animation
 adachi = {}
 
@@ -36,6 +37,7 @@ function adachi.update(dt)
 	adachi.keypressed(keyDown,dt)
     end
 end
+
 adachi.animation:update(dt)
 end
 
@@ -53,6 +55,9 @@ adachi.hitbox:draw('fill')
  for shape, delta in pairs(HC.collisions(adachi.hitbox)) do
 shape:draw('fill')
 end
+
+--love.graphics.print( love.timer.getTime(), gameState.player.x, gameState.player.y)
+--dialogue.draw(keyObject.comment, gameState.player.x, gameState.player.y)
 end
 
 function adachi.movement(dt)

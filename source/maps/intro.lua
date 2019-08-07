@@ -1,5 +1,5 @@
 require 'source.global.objects'
-
+require 'source.text.dialogue'
   require ("source/objects/key")
 intro = {}
 intro.loaded = false
@@ -10,6 +10,8 @@ function introreceivepoly(_type, msg) --object monitoring function
 	if (_type == MESSAGE_CLICK) then
 		if (msg == 11 or msg == 12 or msg == 13) then
 			intro.objects:DestroyObject(msg)
+			dialogue.set(5, keyObject.comment)
+			
 		end
 	end
 end
@@ -24,7 +26,7 @@ function intro.load()
 	intro.objects:MoveObject(11, 300, 100, 5)
 	intro.objects:CreateObject(12, 11, 11)
 	intro.objects:MoveObject(12, 475, 475, 1)
-	intro.objects:CreateObject(13, 'img/keycol.png', 'img/key.png')
+	intro.objects:CreateObject(13, keyObject.colImg, keyObject.image)
 	intro.objects:MoveObject(13, 350, 450, 3)
 end
 function intro.unload()
@@ -35,7 +37,8 @@ function intro.draw()
 	intro.rect:draw('fill')
 	intro.couch:draw('fill')
 	intro.objects:draw()
-end
+	love.graphics.print('Gay timer which should show when dialogue disappears I dont know how to make it stop at 0 and i dont care: '  .. result - love.timer.getTime(), 75, 0)
+end	-- i can only imagine what adding talking animation is going to be like
 function intro.update(dt)
 	return
 end

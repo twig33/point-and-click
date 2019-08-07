@@ -189,7 +189,6 @@ function objects:draw()
 	for _, obj in ipairs(self) do
 		love.graphics.setColor(1,1,1)
 		love.graphics.draw(obj.resources.imgs[obj.state], obj.x, obj.y) 
-		
 		love.graphics.setColor(0,0.75,0)
 		love.graphics.polygon('line', obj.polygon:unpack())
 	end
