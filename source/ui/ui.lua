@@ -1,6 +1,6 @@
-require 'logging'
-require 'helper'
-require 'message'
+--require 'logging'
+--require 'helper'
+--require 'message'
 
 ui = {}
 ui.__index = ui

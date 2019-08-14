@@ -1,4 +1,5 @@
-local anim8 = require 'lib.anim8.anim8'
+local anim8 = require 'source.lib.anim8.anim8'
+require 'source.objects.key'
 local image, animation
 adachi = {}
 
@@ -20,7 +21,7 @@ adachi.animations = {
 local keyDown 
 adachi.animation = animation
 end
-
+gameState = {}
 function adachi.unload()
 image = nil
 animation = nil
@@ -30,12 +31,13 @@ end
 function adachi.update(dt)
 
 	adachi.movement(dt)
-	adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)
-  for shape, delta in pairs(HC.collisions(adachi.hitbox)) do
+	adachi.hitbox:moveTo(gameState.player.x+15, gameState.player.y+15)		--Important: make gamestate a part of
+  for shape, delta in pairs(HC.collisions(adachi.hitbox)) do				--animating.lua or change it to something
     if shape:collidesWith(adachi.hitbox) then	
 	adachi.keypressed(keyDown,dt)
     end
 end
+
 adachi.animation:update(dt)
 end
 
@@ -53,6 +55,9 @@ adachi.hitbox:draw('fill')
  for shape, delta in pairs(HC.collisions(adachi.hitbox)) do
 shape:draw('fill')
 end
+
+--love.graphics.print( love.timer.getTime(), gameState.player.x, gameState.player.y)
+--dialogue.draw(keyObject.comment, gameState.player.x, gameState.player.y)
 end
 
 function adachi.movement(dt)
