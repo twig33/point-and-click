@@ -1,4 +1,4 @@
-
+require 'source.maps.intro'
 gameState = {}
 gameState.player = {}
 gameState.pickups = {}
@@ -7,7 +7,7 @@ GAMESTATE_NULL, GAMESTATE_MAINMENU, GAMESTATE_GAME, GAMESTATE_PAUSE, GAMESTATE_C
 ROOM_NULL, ROOM_INTRO = 0, 1
 GAME_NEWGAME, GAME_CONTINUE = 1, 2
 
-function gameStateInit()
+function gameStateInit()			--reset through this
 
   -- Number of times the game has been saved.
   -- Used to prevent certain save blocks from spawning
@@ -47,7 +47,7 @@ end
 
 function ChangeGameState(staet, unload, param)
 	if (unload == nil) then unload = true end
-	log("Unloading gamestate " .. tostring(staet) .. "unload = " .. tostring(unload) .. "\n")
+	log("Unloading gamestate " .. tostring(staet) .. " unload = " .. tostring(unload) .. "\n")
 	if (gameState.state ~= GAMESTATE_NULL and unload == true) then
 		GameState[gameState.state].unload()
 	end
@@ -55,4 +55,10 @@ function ChangeGameState(staet, unload, param)
 	if (gameState.state ~= GAMESTATE_NULL and GameState[gameState.state].loaded == false) then
 		GameState[gameState.state].load(param)
 	end
+	
+	if (gameState.state == GAMESTATE_MAINMENU and GameState[gameState.state].loaded == true) then
+		log ('Main Menu gamestate reached' .. tostring(gameState.room) ..' \n')
+		gameStateInit()
+		
+	end --reset all 
 end
