@@ -11,15 +11,18 @@ function game.changeRoom(param)
 	param = param or nil
 	if (gameState.room ~= ROOM_NULL) then
 		Room[gameState.room].unload()
+		Room[gameState.room].loaded = nil
 	end
 	gameState.room = param
 	if (gameState.room ~= ROOM_NULL) then
 		Room[gameState.room].load()
+		log("Unloading room " .. tostring(gameState.room) .. "\n")
 	end
 end
 function game.load(param)
 	game.loaded = true
 	if (param == GAME_NEWGAME) then
+		--intro.load()				--Does not change anything
 		game.changeRoom(ROOM_INTRO)
 	end
 	adachi.load()
@@ -33,7 +36,7 @@ end
 function game.draw()
 	love.graphics.setColor(1, 1, 1)
 	Room[gameState.room].draw()
-			love.graphics.setColor(255,255,255,255)
+	love.graphics.setColor(255,255,255,255)
 	adachi.draw()
 	game.ui:draw()
 	dialogue.draw()
